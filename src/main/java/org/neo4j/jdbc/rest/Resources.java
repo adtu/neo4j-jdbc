@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
@@ -52,6 +53,7 @@ public class Resources
 
     private static void configureClient( Context context, ClientInfo clientInfo )
     {
+        context.getLogger().setLevel( Level.WARNING );
         clientInfo.setAcceptedMediaTypes( streamingJson() );
         clientInfo.setAcceptedCharacterSets( charsetUtf8() );
     }

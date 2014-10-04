@@ -11,6 +11,7 @@ import org.neo4j.test.TestGraphDatabaseFactory;
 import static java.util.Arrays.asList;
 
 import static org.junit.Assert.assertEquals;
+import static org.neo4j.helpers.collection.MapUtil.map;
 
 /**
  * @author mh
@@ -24,8 +25,8 @@ public class EmbeddedQueryExecutorTest
         GraphDatabaseService db = new TestGraphDatabaseFactory().newImpermanentDatabase();
         long nodeId = createNode( db );
         final EmbeddedQueryExecutor executor = new EmbeddedQueryExecutor( db );
-        final ExecutionResult result = executor.executeQuery( "start n=node(" + nodeId + ") return ID(n) as id",
-                null, true );
+        final ExecutionResult result = executor.executeQuery( "match (n) where id(n) = {1} return ID(n) as id",
+                map("1",nodeId), true );
         assertEquals( asList( "id" ), result.columns() );
         final Object[] row = result.iterator().next();
         assertEquals( 1, row.length );

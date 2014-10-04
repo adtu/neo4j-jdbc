@@ -9,10 +9,10 @@ import org.junit.Test;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
+import org.neo4j.io.fs.FileUtils;
 import org.neo4j.jdbc.embedded.EmbeddedDatabases;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.neo4j.kernel.EmbeddedReadOnlyGraphDatabase;
-import org.neo4j.kernel.impl.util.FileUtils;
 import org.neo4j.test.ImpermanentGraphDatabase;
 
 import static org.junit.Assert.assertSame;

@@ -25,17 +25,19 @@ import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.restlet.Context;
 
 /**
  * JDBC Driver implementation that is backed by a REST Neo4j Server.
  */
 public class Driver implements java.sql.Driver
 {
-
     private final static Log log = LogFactory.getLog( Driver.class );
     public static final String CON_PREFIX = "jdbc:neo4j:";
 

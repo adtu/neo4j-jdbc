@@ -51,7 +51,7 @@ public class Neo4jJdbcPerformanceTestRunner
     private long execute( final Connection con ) throws SQLException
     {
         long time = System.currentTimeMillis();
-        final ResultSet rs = con.createStatement().executeQuery( "start n=node(*) match p=n-[r]->m return n," +
+        final ResultSet rs = con.createStatement().executeQuery( "match (n) match p=n-[r]->m return n," +
                 "ID(n) as id, r,m,p" );
         int count = 0;
         while ( rs.next() )
@@ -66,7 +66,6 @@ public class Neo4jJdbcPerformanceTestRunner
     {
         long delta = 0;
         execute( con );
-        System.out.println( "START" );
         for ( int i = 0; i < RUNS; i++ )
         {
             delta += execute( con );

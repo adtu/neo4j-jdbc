@@ -128,7 +128,7 @@ public class StreamingParserTest
         assertFalse( rows.hasNext() );
     }
 
-    static final Statement STATEMENT = new Statement( "start n=node(0) return n", Collections.<String,
+    static final Statement STATEMENT = new Statement( "match (n) where id(n) = 0 return n", Collections.<String,
             Object>emptyMap() );
 
     @Test

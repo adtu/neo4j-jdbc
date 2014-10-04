@@ -74,7 +74,7 @@ public class Neo4jStatementTest extends Neo4jJdbcTest
     @Test(expected = SQLException.class)
     public void testPreparedStatementMissingParameter() throws Exception
     {
-        final PreparedStatement ps = conn.prepareStatement( "start n=node({1}) return ID(n) as id" );
+        final PreparedStatement ps = conn.prepareStatement( "match (n) where id(n) = {1} return ID(n) as id" );
         final ResultSet rs = ps.executeQuery();
         rs.next();
     }
@@ -82,7 +82,7 @@ public class Neo4jStatementTest extends Neo4jJdbcTest
     @Test
     public void testExecutePreparedStatement() throws Exception
     {
-        final PreparedStatement ps = conn.prepareStatement( "start n=node({1}) return ID(n) as id" );
+        final PreparedStatement ps = conn.prepareStatement( "match (n) where id(n) = {1} return ID(n) as id" );
         ps.setLong( 1, nodeId );
         final ResultSet rs = ps.executeQuery();
         assertTrue( rs.next() );

@@ -25,8 +25,6 @@ import org.neo4j.jdbc.util.Closer;
 import java.io.Closeable;
 import java.util.*;
 
-import org.neo4j.helpers.collection.ClosableIterator;
-
 /**
  * Cypher execution result.
  */

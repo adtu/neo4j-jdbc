@@ -124,7 +124,7 @@ public class TransactionTest extends Neo4jJdbcTest
     private void assertNodeExists( long nodeId, boolean exists ) throws SQLException
     {
         // work around the automatic node-by-id lookup in cypher
-        final ResultSet found = conn.executeQuery( "start n=node(*) where has(n.name) AND id(n) = {id} return id(n)",
+        final ResultSet found = conn.executeQuery( "match (n) where has(n.name) AND id(n) = {id} return id(n)",
                 map( "id", nodeId ) );
         assertEquals( "node exists " + nodeId, exists, found.next() );
         if ( exists )

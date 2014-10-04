@@ -60,8 +60,8 @@ public class Neo4jQueryNodeTest extends Neo4jJdbcTest
     {
         createData( gdb );
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery( "cypher 1.9 start n=node(*) match p=(n)-[r?]-(m) return n,r,m,p,ID(n)," +
-                "length(p),n.name? as name limit 5" );
+        ResultSet rs = stmt.executeQuery( "match (n) optional match p=(n)-[r]-(m) return n,r,m,p,ID(n)," +
+                "length(p),n.name as name limit 5" );
         int count = 0;
         ResultSetMetaData metaData = rs.getMetaData();
         int cols = metaData.getColumnCount();

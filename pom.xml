@@ -8,7 +8,7 @@
     <url>http://components.neo4j.org/${project.artifactId}/${project.version}</url>
 
     <properties>
-        <neo4j.version>2.1.5</neo4j.version>
+        <neo4j.version>2.2-SNAPSHOT</neo4j.version>
         <bundle.namespace>org.neo4j.jdbc</bundle.namespace>
         <short-name>neo4j-jdbc</short-name>
         <license-text.header>GPL-3-header.txt</license-text.header>
@@ -100,7 +100,13 @@
             <version>${neo4j.version}</version>
             <type>test-jar</type>
             <optional>true</optional>
-            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-io</artifactId>
+            <version>${neo4j.version}</version>
+            <type>test-jar</type>
+            <optional>true</optional>
         </dependency>
 
         <!-- Testing -->

@@ -29,7 +29,8 @@ public class ManualConnectionTest
         final String hostPort = args[0];
         Neo4jConnection conn = driver.connect( "jdbc:neo4j://" + hostPort, props );
         final long id = 0L;
-        final ResultSet rs = conn.executeQuery( "start n=node({id}) return id(n) as id", map( "id", id ) );
+        final ResultSet rs = conn.executeQuery( "match (n) where id(n)={id} return id(n) as id", map( "id",
+                id ) );
         while ( rs.next() )
         {
             assertEquals( id, rs.getLong( "id" ) );
