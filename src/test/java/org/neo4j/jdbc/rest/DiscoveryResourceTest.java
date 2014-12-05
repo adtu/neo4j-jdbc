@@ -12,8 +12,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.jdbc.TestServer;
 import org.neo4j.kernel.GraphDatabaseAPI;
-import org.neo4j.server.web.WebServer;
-import org.neo4j.test.TestGraphDatabaseFactory;
 
 import static java.util.Arrays.asList;
 
@@ -33,16 +31,21 @@ public class DiscoveryResourceTest
     @BeforeClass
     public static void startServer() throws Exception
     {
-        db = (GraphDatabaseAPI) new TestGraphDatabaseFactory().newImpermanentDatabase();
+        webServer = TestServer.startWebServer( TestServer.PORT, false );
+        db = webServer.getDatabase().getGraph();
+        createData( db );
+        resource = new Resources(URI, new Client("HTTP"), USER_AGENT ).getDiscoveryResource(  );
+    }
+
+    private static void createData( GraphDatabaseAPI db )
+    {
         try ( Transaction tx = db.beginTx() )
         {
-            Node node = db.createNode( DynamicLabel.label( "FooBar" ) );
+            Node node = DiscoveryResourceTest.db.createNode( DynamicLabel.label( "FooBar" ) );
             node.setProperty( "foo", "bar" );
             node.createRelationshipTo( node, DynamicRelationshipType.withName( "FOO_BAR" ) );
             tx.success();
         }
-        webServer = TestServer.startWebServer( db, TestServer.PORT, false );
-        resource = new Resources(URI, new Client("HTTP"), USER_AGENT ).getDiscoveryResource(  );
     }
 
     @AfterClass

@@ -20,6 +20,7 @@
 
 package org.neo4j.jdbc;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -42,7 +43,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.kernel.KernelData;
 import org.neo4j.server.CommunityNeoServer;
-import org.neo4j.server.web.WebServer;
 import org.neo4j.test.ImpermanentGraphDatabase;
 import org.neo4j.test.TestGraphDatabaseFactory;
 
@@ -109,7 +109,8 @@ public abstract class Neo4jJdbcTest
             case server:
                 if ( webServer == null )
                 {
-                    webServer = TestServer.startWebServer( gdb, TestServer.PORT, false );
+                    webServer = TestServer.startWebServer( TestServer.PORT, false );
+                    updateGdbFromServer();
                 }
                 props.setProperty( Driver.LEGACY, "true" );
                 conn = driver.connect( "jdbc:neo4j://localhost:" + TestServer.PORT, props );
@@ -117,14 +118,16 @@ public abstract class Neo4jJdbcTest
             case server_tx:
                 if ( webServer == null )
                 {
-                    webServer = TestServer.startWebServer( gdb, TestServer.PORT, false );
+                    webServer = TestServer.startWebServer( TestServer.PORT, false );
+                    updateGdbFromServer();
                 }
                 conn = driver.connect( "jdbc:neo4j://localhost:" + TestServer.PORT, props );
                 break;
             case server_auth:
                 if ( webServer == null )
                 {
-                    webServer = TestServer.startWebServer( gdb, TestServer.PORT, true );
+                    webServer = TestServer.startWebServer( TestServer.PORT, true );
+                    updateGdbFromServer();
                 }
                 props.put( Driver.USER, TestAuthenticationFilter.USER );
                 props.put( Driver.PASSWORD, TestAuthenticationFilter.PASSWORD );
@@ -132,6 +135,12 @@ public abstract class Neo4jJdbcTest
                 conn = driver.connect( "jdbc:neo4j://localhost:" + TestServer.PORT, props );
                 break;
         }
+    }
+
+    private void updateGdbFromServer()
+    {
+        if (gdb !=null ) { gdb.shutdown(); }
+        gdb = (ImpermanentGraphDatabase) webServer.getDatabase().getGraph();
     }
 
 

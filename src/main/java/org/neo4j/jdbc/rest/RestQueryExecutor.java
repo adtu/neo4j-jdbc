@@ -13,6 +13,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 import org.restlet.Response;
 import org.restlet.data.CharacterSet;
+import org.restlet.engine.header.Header;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
@@ -21,6 +22,7 @@ import org.restlet.routing.Filter;
 import org.neo4j.jdbc.ExecutionResult;
 import org.neo4j.jdbc.QueryExecutor;
 import org.neo4j.jdbc.Version;
+import org.restlet.util.Series;
 
 /**
  * @author mh
@@ -29,6 +31,7 @@ import org.neo4j.jdbc.Version;
 public class RestQueryExecutor implements QueryExecutor
 {
     protected final static Log log = LogFactory.getLog( RestQueryExecutor.class );
+    public static final String HEADERS = "org.restlet.http.headers";
 
     private ClientResource cypherResource;
     private ObjectMapper mapper = new ObjectMapper();
@@ -66,6 +69,8 @@ public class RestQueryExecutor implements QueryExecutor
             ObjectNode queryNode = queryParameter( query, parameters );
 
             resource = new ClientResource( cypherResource );
+            Series<Header> headers = getHeaders( resource );
+            headers.add( "X-Stream", "true" );
             Representation rep = resource.post( queryNode.toString() );
             rep.setCharacterSet( new CharacterSet( "UTF-8" ) );
             JsonNode node = mapper.readTree( rep.getReader() );
@@ -89,6 +94,17 @@ public class RestQueryExecutor implements QueryExecutor
         {
             throw new SQLException( e );
         }
+    }
+
+    private Series<Header> getHeaders( ClientResource resource )
+    {
+        Series<Header> headers = (Series<Header>) resource.getRequestAttributes().get( HEADERS );
+        if ( headers == null )
+        {
+            headers = new Series<>( Header.class );
+            resource.getRequestAttributes().put( HEADERS, headers );
+        }
+        return headers;
     }
 
     /**
